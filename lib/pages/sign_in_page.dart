@@ -29,7 +29,11 @@ class _SignInPageState extends State<SignInPage> {
         username: usernameController.text,
         password: passwordController.text,
       )) {
-        Navigator.pushNamed(context, '/home');
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          '/home',
+          (route) => false,
+        );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
