@@ -1,42 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:gais/pages/home/profile_page.dart';
-import 'package:provider/provider.dart';
+import 'package:gais/controllers/controllers.dart';
 import 'package:gais/pages/home/home_page.dart';
-import 'package:gais/providers/page_provider.dart';
 import 'package:gais/theme.dart';
+import 'package:get/get.dart';
 
-class MainPage extends StatefulWidget {
-  @override
-  State<MainPage> createState() => _MainPageState();
-}
+class MainPage extends StatelessWidget {
+  final mainPageController = Get.put(MainPageController());
 
-class _MainPageState extends State<MainPage> {
-  static DateTime? currentBackPressTime;
-
-  Future<bool> onWillPop(BuildContext context) {
-    DateTime now = DateTime.now();
-    if (currentBackPressTime == null ||
-        now.difference(currentBackPressTime ?? now) >
-            const Duration(seconds: 2)) {
-      currentBackPressTime = now;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: alerrColor,
-          content: Text(
-            'Tekan sekali lagi untuk keluar dari aplikasi',
-            textAlign: TextAlign.center,
-          ),
-        ),
-      );
-      return Future.value(false);
-    }
-    return Future.value(true);
-  }
+  MainPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    PageProvider pageProvider = Provider.of<PageProvider>(context);
-
     Widget addButton() {
       return FloatingActionButton(
         onPressed: () {
@@ -50,46 +24,46 @@ class _MainPageState extends State<MainPage> {
       );
     }
 
-    Widget customButtonNav() {
+    Widget customButtonNav(MainPageController controller) {
       return ClipRRect(
-        borderRadius: BorderRadius.vertical(
+        borderRadius: const BorderRadius.vertical(
           top: Radius.circular(30),
         ),
         child: BottomAppBar(
-          shape: CircularNotchedRectangle(),
+          shape: const CircularNotchedRectangle(),
           notchMargin: 12,
           clipBehavior: Clip.antiAlias,
           child: BottomNavigationBar(
             backgroundColor: backgroundColor4,
-            currentIndex: pageProvider.currentIndex,
+            currentIndex: controller.pageIndex.value,
             onTap: (value) {
               print(value);
-              pageProvider.currentIndex = value;
+              controller.pageIndex.value = value;
             },
             type: BottomNavigationBarType.fixed,
             items: [
               BottomNavigationBarItem(
                 icon: Container(
-                  margin: EdgeInsets.only(top: 20, bottom: 10),
+                  margin: const EdgeInsets.only(top: 20, bottom: 10),
                   child: Image.asset(
                     'assets/icon_home.png',
                     width: 21,
-                    color: pageProvider.currentIndex == 0
+                    color: controller.pageIndex.value == 0
                         ? primaryColor
-                        : Color(0xff808191),
+                        : const Color(0xff808191),
                   ),
                 ),
                 label: '',
               ),
               BottomNavigationBarItem(
                 icon: Container(
-                  margin: EdgeInsets.only(top: 20, bottom: 10),
+                  margin: const EdgeInsets.only(top: 20, bottom: 10),
                   child: Image.asset(
                     'assets/icon_user.png',
                     width: 21,
-                    color: pageProvider.currentIndex == 1
+                    color: controller.pageIndex.value == 1
                         ? primaryColor
-                        : Color(0xff808191),
+                        : const Color(0xff808191),
                   ),
                 ),
                 label: '',
@@ -101,7 +75,7 @@ class _MainPageState extends State<MainPage> {
     }
 
     Widget body() {
-      switch (pageProvider.currentIndex) {
+      switch (mainPageController.pageIndex.value) {
         case 0:
           return HomePage();
         case 1:
@@ -111,13 +85,17 @@ class _MainPageState extends State<MainPage> {
       }
     }
 
-    return Scaffold(
-      backgroundColor:
-          pageProvider.currentIndex == 0 ? backgroundColor1 : backgroundColor3,
-      floatingActionButton: addButton(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: customButtonNav(),
-      body: WillPopScope(onWillPop: () => onWillPop(context), child: body()),
+    return GetBuilder<MainPageController>(
+      builder: (controller) => Scaffold(
+        backgroundColor: controller.pageIndex.value == 0
+            ? backgroundColor1
+            : backgroundColor3,
+        floatingActionButton: addButton(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: customButtonNav(controller),
+        body: WillPopScope(
+            onWillPop: () => controller.onWillPop(context), child: body()),
+      ),
     );
   }
 }

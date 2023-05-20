@@ -1,80 +1,52 @@
-import 'dart:convert';
-
-import 'package:gais/models/user_model.dart';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
+part of 'services.dart';
 
 class AuthService {
-  String baseUrl = 'http://sumo.completeselular.com:3990/api';
-
-  Future<UserModel> login({
+  static Future<ApiReturnValue<bool>> login({
     required String username,
     required String password,
   }) async {
-    var url = '$baseUrl/login';
-    var headers = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    };
-    var body = jsonEncode({'username': username, 'password': password});
-
-    //variabel untuk request ke backend menggunakan http
-    var response = await http.post(
-      Uri.parse(url),
-      headers: headers,
-      body: body,
-    );
-
-    print(response.body);
-    print('berhasil login');
-
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body)['data'];
-      UserModel user = UserModel.fromJson(data['user']);
-      user.token = 'Bearer ${data['access_token']}';
+    final response = await ApiService().post('${ApiUrl.baseUrl}/login',
+        headers: ApiUrl.defaultHeader,
+        body: {'username': username, 'password': password});
+    if (response.value != null) {
       SharedPreferences pref = await SharedPreferences.getInstance();
-      pref.setString('token', 'Bearer ${data['access_token']}');
-
-      return user;
-    } else {
-      throw Exception('Gagal Login');
+      pref.setString(
+          'token', 'Bearer ${response.value['data']['access_token']}');
     }
+
+    return ApiReturnValue(
+        value: response.value != null, message: response.message);
   }
 
-  Future<UserModel?> checkToken() async {
+  static Future<ApiReturnValue<bool>> checkToken() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     if (pref.getString('token') == null) {
-      return null;
+      return ApiReturnValue(value: false, message: 'Silahkan login');
     }
 
-    print(pref.getString('token'));
-    var url = '$baseUrl/user';
-    var headers = {
-      'Authorization': pref.getString('token') ?? '',
-      'Content-Type': 'application/json'
-    };
+    final response = await ApiService().get(
+      '${ApiUrl.baseUrl}/user',
+      headers: await ApiUrl.headerWithToken(),
+    );
 
-    try {
-      var response = await http.get(
-        Uri.parse(url),
-        headers: headers,
-      );
+    log(response.value.toString());
 
-      print(response.statusCode);
+    return ApiReturnValue(
+        value: response.value != null, message: response.message);
+  }
 
-      if (response.statusCode == 200) {
-        var data = jsonDecode(response.body)['data'];
-        UserModel user = UserModel.fromJson(data);
-        user.token = 'Bearer ${data['access_token']}';
+  static Future<ApiReturnValue<UserModel>> getUser() async {
+    final response = await ApiService().get(
+      '${ApiUrl.baseUrl}/user',
+      headers: await ApiUrl.headerWithToken(),
+    );
 
-        return user;
-      } else {
-        pref.clear();
-        return null;
-      }
-    } catch (e) {
-      pref.clear();
-      return null;
+    if (response.value == null) {
+      return ApiReturnValue(value: null, message: response.value);
     }
+
+    final user = UserModel.fromJson(response.value['data']);
+
+    return ApiReturnValue(value: user);
   }
 }

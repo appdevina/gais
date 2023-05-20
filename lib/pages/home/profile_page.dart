@@ -1,80 +1,79 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:gais/providers/auth_provider.dart';
+import 'package:gais/controllers/controllers.dart';
 import 'package:gais/theme.dart';
-
-import 'package:gais/models/user_model.dart';
+import 'package:get/get.dart';
 
 class ProfilePage extends StatelessWidget {
+  const ProfilePage({super.key});
+
   @override
   Widget build(BuildContext context) {
-    //tambahkan AuthProvider
-    AuthProvider authProvider = Provider.of<AuthProvider>(context);
-    UserModel user = authProvider.user;
-
     Widget header() {
-      return AppBar(
-        backgroundColor: backgroundColor1,
-        automaticallyImplyLeading: false,
-        elevation: 0,
-        flexibleSpace: SafeArea(
-            child: Container(
-          padding: EdgeInsets.all(
-            defaultMargin,
-          ),
-          child: Row(
-            children: [
-              ClipOval(
-                child: user.profilePhotoUrl != null
-                    ? Image.network(
-                        user.profilePhotoUrl!,
-                      )
-                    : Image.asset(
-                        'assets/image_profile.png',
-                      ),
-              ),
-              SizedBox(
-                width: 14,
-              ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Helo, ${user.fullname}',
-                      style: primaryTextStyle.copyWith(
-                        fontSize: 24,
-                        fontWeight: semiBold,
-                      ),
-                    ),
-                    Text(
-                      '@${user.username}',
-                      style: subtitleTextStyle.copyWith(
-                        fontSize: 16,
-                      ),
-                    ),
-                  ],
+      return GetBuilder<HomeController>(
+        id: 'user',
+        builder: (controller) => AppBar(
+          backgroundColor: backgroundColor1,
+          automaticallyImplyLeading: false,
+          elevation: 0,
+          flexibleSpace: SafeArea(
+              child: Container(
+            padding: EdgeInsets.all(
+              defaultMargin,
+            ),
+            child: Row(
+              children: [
+                ClipOval(
+                  child: controller.user?.profilePhotoUrl != null
+                      ? Image.network(
+                          controller.user!.profilePhotoUrl!,
+                        )
+                      : Image.asset(
+                          'assets/image_profile.png',
+                        ),
                 ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, '/sign-in', (route) => false);
-                },
-                child: Image.asset(
-                  'assets/button_exit.png',
-                  width: 20,
+                const SizedBox(
+                  width: 14,
                 ),
-              ),
-            ],
-          ),
-        )),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Helo, ${controller.user?.fullname ?? '-'}',
+                        style: primaryTextStyle.copyWith(
+                          fontSize: 24,
+                          fontWeight: semiBold,
+                        ),
+                      ),
+                      Text(
+                        '@${controller.user?.username ?? '-'}',
+                        style: subtitleTextStyle.copyWith(
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, '/sign-in', (route) => false);
+                  },
+                  child: Image.asset(
+                    'assets/button_exit.png',
+                    width: 20,
+                  ),
+                ),
+              ],
+            ),
+          )),
+        ),
       );
     }
 
     Widget menuItem(String text) {
       return Container(
-        margin: EdgeInsets.only(
+        margin: const EdgeInsets.only(
           top: 16,
         ),
         child: Row(
@@ -108,7 +107,7 @@ class ProfilePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Text(
@@ -130,7 +129,7 @@ class ProfilePage extends StatelessWidget {
               menuItem(
                 'Help',
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               Text(

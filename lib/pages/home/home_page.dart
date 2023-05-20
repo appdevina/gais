@@ -1,85 +1,87 @@
 import 'package:flutter/material.dart';
+import 'package:gais/controllers/controllers.dart';
 import 'package:gais/widgets/home_data_item.dart';
-import 'package:provider/provider.dart';
-import 'package:gais/models/user_model.dart';
-import 'package:gais/providers/auth_provider.dart';
 import 'package:gais/theme.dart';
+import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {
+  HomePage({super.key});
+  final homeController = Get.put(HomeController());
+
   @override
   Widget build(BuildContext context) {
-    AuthProvider authProvider = Provider.of<AuthProvider>(context);
-    UserModel user = authProvider.user;
-
     Widget header() {
-      return Container(
-        margin: EdgeInsets.only(
-          top: defaultMargin,
-          left: defaultMargin,
-          right: defaultMargin,
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Halo, ${user.fullname}',
-                    style: primaryTextStyle.copyWith(
-                      fontSize: 24,
-                      fontWeight: semiBold,
+      return GetBuilder<HomeController>(
+        id: 'user',
+        builder: (controller) => Container(
+          margin: EdgeInsets.only(
+            top: defaultMargin,
+            left: defaultMargin,
+            right: defaultMargin,
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Halo, ${controller.user?.fullname ?? '-'}',
+                      style: primaryTextStyle.copyWith(
+                        fontSize: 24,
+                        fontWeight: semiBold,
+                      ),
                     ),
-                  ),
-                  Text(
-                    '@${user.username}',
-                    style: subtitleTextStyle.copyWith(
-                      fontSize: 16,
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Container(
-              width: 54,
-              height: 54,
-              decoration: user.profilePhotoUrl != null
-                  ? BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: NetworkImage(
-                          user.profilePhotoUrl ?? '',
-                        ),
-                        fit: BoxFit.fill,
+                    Text(
+                      '@${controller.user?.username ?? '-'}',
+                      style: subtitleTextStyle.copyWith(
+                        fontSize: 16,
                       ),
                     )
-                  : const BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: AssetImage(
-                          'assets/image_profile.png',
+                  ],
+                ),
+              ),
+              Container(
+                width: 54,
+                height: 54,
+                decoration: controller.user?.profilePhotoUrl != null
+                    ? BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            controller.user?.profilePhotoUrl ?? '',
+                          ),
+                          fit: BoxFit.fill,
                         ),
-                        fit: BoxFit.fill,
+                      )
+                    : const BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: AssetImage(
+                            'assets/image_profile.png',
+                          ),
+                          fit: BoxFit.fill,
+                        ),
                       ),
-                    ),
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       );
     }
 
-    Widget ReportMenuItem() {
+    Widget reportMenuItem() {
       return GestureDetector(
         onTap: () => showDialog(
           context: context,
           builder: (ctx) => AlertDialog(
-            title: Text(
+            title: const Text(
               'Yakin akan membuat request ?',
             ),
             actions: [
               ElevatedButton(
                 onPressed: () => Navigator.pop(context),
-                child: Text(
+                child: const Text(
                   'Tidak',
                 ),
               ),
@@ -89,7 +91,7 @@ class HomePage extends StatelessWidget {
         child: Container(
           width: 155,
           height: 155,
-          padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           decoration: BoxDecoration(
             color: primaryColor,
             borderRadius: BorderRadius.circular(20),
@@ -124,11 +126,11 @@ class HomePage extends StatelessWidget {
       );
     }
 
-    Widget RequestMenuItem() {
+    Widget requestMenuItem() {
       return Container(
         width: 155,
         height: 155,
-        padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         decoration: BoxDecoration(
           color: primaryColor,
           borderRadius: BorderRadius.circular(20),
@@ -182,8 +184,8 @@ class HomePage extends StatelessWidget {
               spacing: 17,
               runSpacing: 17,
               children: [
-                ReportMenuItem(),
-                RequestMenuItem(),
+                reportMenuItem(),
+                requestMenuItem(),
               ],
             ),
             const SizedBox(

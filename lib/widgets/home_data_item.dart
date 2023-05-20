@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gais/theme.dart';
 
@@ -23,7 +22,7 @@ class HomeDataItem extends StatelessWidget {
           Container(
             width: 70,
             height: 70,
-            margin: EdgeInsets.only(
+            margin: const EdgeInsets.only(
               bottom: 8,
             ),
             decoration: BoxDecoration(

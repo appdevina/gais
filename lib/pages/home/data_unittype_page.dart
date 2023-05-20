@@ -21,8 +21,8 @@ class DataUnitTypePage extends StatelessWidget {
         ),
       ),
       body: ListView(
-        children: [
-          const SizedBox(
+        children: const [
+          SizedBox(
             height: 30,
           ),
           DataItem(title: 'title'),

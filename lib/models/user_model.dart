@@ -1,33 +1,43 @@
-class UserModel {
-  int? id;
-  String? fullname;
-  String? username;
-  String? profilePhotoUrl;
-  String? token;
+part of 'models.dart';
 
-  UserModel({
-    this.id,
-    this.fullname,
-    this.username,
+class UserModel extends Equatable {
+  final int id;
+  final String fullname;
+  final String username;
+  final String? profilePhotoUrl;
+  final DivisionModel division;
+  final BadanUsahaModel badanUsaha;
+  final RoleModel role;
+
+  const UserModel({
+    required this.id,
+    required this.fullname,
+    required this.username,
     this.profilePhotoUrl,
-    this.token,
+    required this.division,
+    required this.badanUsaha,
+    required this.role,
   });
 
-  UserModel.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    fullname = json['fullname'];
-    username = json['username'];
-    profilePhotoUrl = json['profile_picture'] ?? json['profile_picture'];
-    token = json['access_token'];
-  }
+  factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
+        id: json['id'],
+        fullname: json['fullname'],
+        username: json['username'],
+        profilePhotoUrl: json['profile_picture'] ?? json['profile_picture'],
+        division: DivisionModel.fromJson(json['division']),
+        badanUsaha: BadanUsahaModel.fromJson(json['badan_usaha']),
+        role: RoleModel.fromJson(json['role']),
+      );
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'fullname': fullname,
-      'username': username,
-      'profile_picture': profilePhotoUrl,
-      'access_token': token,
-    };
-  }
+  @override
+  List<Object?> get props => [
+        // Ini inisialisasi field2 yg memang sama, tapi value boleh beda
+        id,
+        fullname,
+        username,
+        profilePhotoUrl,
+        division,
+        badanUsaha,
+        role,
+      ];
 }

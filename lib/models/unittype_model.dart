@@ -1,24 +1,24 @@
 class UserModel {
   int? id;
-  String? unit_type;
+  String? unitType;
   String? token;
 
   UserModel({
     this.id,
-    this.unit_type,
+    this.unitType,
     this.token,
   });
 
   UserModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    unit_type = json['unit_type'];
+    unitType = json['unit_type'];
     token = json['access_token'];
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'unit_type': unit_type,
+      'unit_type': unitType,
       'access_token': token,
     };
   }
