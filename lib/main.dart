@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gais/pages/home/data_unittype_page.dart';
+import 'package:gais/pages/home/unittype/data_unittype_page.dart';
 import 'package:gais/pages/home/profile_page.dart';
 import 'package:gais/pages/sign_in_page.dart';
 import 'package:gais/pages/splash_page.dart';
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         '/sign-in': (context) => SignInPage(),
         '/home': (context) => MainPage(),
         '/profile': (context) => const ProfilePage(),
-        '/unittype': (context) => const DataUnitTypePage(),
+        '/unittype': (context) => DataUnitTypePage(),
       },
     );
   }

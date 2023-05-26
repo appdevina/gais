@@ -1,25 +1,32 @@
-class UserModel {
-  int? id;
-  String? unitType;
-  String? token;
+part of 'models.dart';
 
-  UserModel({
-    this.id,
-    this.unitType,
-    this.token,
+class UnitTypeModel extends Equatable {
+  final int id;
+  final String unitType;
+
+  const UnitTypeModel({
+    required this.id,
+    required this.unitType,
   });
 
-  UserModel.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    unitType = json['unit_type'];
-    token = json['access_token'];
-  }
+  factory UnitTypeModel.fromJson(Map<String, dynamic> json) => UnitTypeModel(
+        id: json['id'],
+        unitType: json['unit_type'],
+      );
+
+  UnitTypeModel copyWith({String? unitType}) =>
+      UnitTypeModel(id: id, unitType: unitType ?? this.unitType);
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'unit_type': unitType,
-      'access_token': token,
     };
   }
+
+  @override
+  List<Object?> get props => [
+        id,
+        unitType,
+      ];
 }

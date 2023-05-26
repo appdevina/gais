@@ -6,3 +6,4 @@ part 'division_model.dart';
 part 'area_model.dart';
 part 'badan_usaha_model.dart';
 part 'role_model.dart';
+part 'unittype_model.dart';

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:gais/models/models.dart';
 import 'package:gais/pages/home/main_page.dart';
@@ -9,3 +11,4 @@ import 'package:get/get.dart';
 part 'login_controller.dart';
 part 'main_page_controller.dart';
 part 'home_controller.dart';
+part 'unittype_controller.dart';

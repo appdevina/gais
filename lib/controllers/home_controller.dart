@@ -8,7 +8,7 @@ class HomeController extends GetxController {
 
     if (response.value == null) {
       Get.snackbar(
-          'error', response.message ?? 'Terjadi kesalahan pada data User');
+          'Error', response.message ?? 'Terjadi kesalahan pada data User');
       return;
     }
 

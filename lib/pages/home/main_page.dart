@@ -37,7 +37,6 @@ class MainPage extends StatelessWidget {
             backgroundColor: backgroundColor4,
             currentIndex: controller.pageIndex.value,
             onTap: (value) {
-              print(value);
               controller.pageIndex.value = value;
             },
             type: BottomNavigationBarType.fixed,

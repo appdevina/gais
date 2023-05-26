@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
@@ -91,6 +92,8 @@ class ApiService extends BaseApiServices {
 
   ApiReturnValue returnReponse(http.Response response) {
     final json = jsonDecode(response.body);
+    log(response.statusCode.toString());
+    log(response.body);
     if (response.statusCode != 200) {
       String message = json['meta']['message'];
       return ApiReturnValue(value: null, message: message);

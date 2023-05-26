@@ -29,8 +29,6 @@ class AuthService {
       headers: await ApiUrl.headerWithToken(),
     );
 
-    log(response.value.toString());
-
     return ApiReturnValue(
         value: response.value != null, message: response.message);
   }

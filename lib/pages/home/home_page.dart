@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gais/controllers/controllers.dart';
+import 'package:gais/pages/home/unittype/data_unittype_page.dart';
 import 'package:gais/widgets/home_data_item.dart';
 import 'package:gais/theme.dart';
 import 'package:get/get.dart';
@@ -222,7 +223,7 @@ class HomePage extends StatelessWidget {
                       iconUrl: 'assets/ic_unittype.png',
                       title: 'Tipe Unit',
                       onTap: () {
-                        Navigator.pushNamed(context, '/unittype');
+                        Get.to(() => DataUnitTypePage());
                       },
                     ),
                   ],
